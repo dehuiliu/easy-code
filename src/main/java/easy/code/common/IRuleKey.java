@@ -1,10 +1,9 @@
 package easy.code.common;
 
-public interface IRuleKey<T> {
+public interface IRuleKey {
     /**
      * @return
      */
     RuleType getRuleType();
 
-    T getRuleKey();
 }

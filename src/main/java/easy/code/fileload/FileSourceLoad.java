@@ -1,7 +1,6 @@
 package easy.code.fileload;
 
 import easy.code.common.IRuleKey;
-import easy.code.common.IRuleSource;
 import easy.code.common.ISourceLoad;
 
 /**
@@ -9,7 +8,9 @@ import easy.code.common.ISourceLoad;
  */
 public class FileSourceLoad implements ISourceLoad {
 
-    public IRuleSource getRuleSource(IRuleKey ruleKey) {
+    @Override
+    public FileRuleInfo getRuleSource(IRuleKey ruleKey) {
+        FileRuleKey fileFileRuleKey = (FileRuleKey) ruleKey;
 
         return null;
     }

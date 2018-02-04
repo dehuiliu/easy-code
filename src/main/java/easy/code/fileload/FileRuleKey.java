@@ -3,17 +3,17 @@ package easy.code.fileload;
 import easy.code.common.IRuleKey;
 import easy.code.common.RuleType;
 
-public class RuleKey implements IRuleKey<RuleKey> {
+public class FileRuleKey implements IRuleKey {
     /**
      * 文件规则路径
      */
     String rulePath;
     /**
-     * 规则文本类型
+     * class/script
      */
     RuleType ruleType;
 
-    public RuleKey(String rulePath, RuleType ruleType) {
+    public FileRuleKey(String rulePath, RuleType ruleType) {
         this.rulePath = rulePath;
         this.ruleType = ruleType;
     }
@@ -22,7 +22,7 @@ public class RuleKey implements IRuleKey<RuleKey> {
         return this.ruleType;
     }
 
-    public RuleKey getRuleKey() {
+    public FileRuleKey getRuleKey() {
         return this;
     }
 }

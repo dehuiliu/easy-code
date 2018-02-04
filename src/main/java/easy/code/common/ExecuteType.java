@@ -1,28 +1,18 @@
 package easy.code.common;
 
-import easy.code.fileload.FileExecuteRule;
+import easy.code.fileload.FileSourceLoad;
 
-public enum ExecuteType implements IExecuteType<ExecuteType> {
+public enum ExecuteType implements IExecuteType {
     FILE {
         @Override
-        public ExecuteType getType() {
-            return FILE;
-        }
-
-        @Override
-        public IExecuteRule getExecuteRule() {
-            return new FileExecuteRule();
+        public DefaultExecuteRule getExecuteRule() {
+            return new DefaultExecuteRule(new FileSourceLoad());
         }
     },
 
     DB {
         @Override
-        public ExecuteType getType() {
-            throw new RuntimeException("暂时未实现");
-        }
-
-        @Override
-        public IExecuteRule getExecuteRule() {
+        public DefaultExecuteRule getExecuteRule() {
             throw new RuntimeException("暂时未实现");
         }
     }

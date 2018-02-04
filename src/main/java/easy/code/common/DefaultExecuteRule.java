@@ -1,12 +1,10 @@
-package easy.code.fileload;
+package easy.code.common;
 
-import easy.code.common.*;
+public class DefaultExecuteRule extends AbstractExecuteRule {
 
-public class FileExecuteRule implements IExecuteRule {
-    private ISourceLoad sourceLoad;
 
-    public FileExecuteRule() {
-        sourceLoad = new FileSourceLoad();
+    public DefaultExecuteRule(ISourceLoad sourceLoad) {
+        super(sourceLoad);
     }
 
     @Override
@@ -15,6 +13,7 @@ public class FileExecuteRule implements IExecuteRule {
         MyGroovyObject myGroovyObject = getCache(ruleKey);
         if (myGroovyObject == null) {
             //加载规则信息
+
             IRuleSource ruleSource = sourceLoad.getRuleSource(ruleKey);
             myGroovyObject = ruleKey.getRuleType().parse(ruleSource);
             //存入缓存信息
@@ -31,7 +30,7 @@ public class FileExecuteRule implements IExecuteRule {
      * @param ruleKey
      * @return
      */
-    private MyGroovyObject getCache(IRuleKey<RuleKey> ruleKey) {
+    private MyGroovyObject getCache(IRuleKey ruleKey) {
 
 
         return null;
