@@ -2,6 +2,7 @@ package easy.code.common;
 
 import easy.code.common.groovyvo.EasyCodeGroovyShell;
 import easy.code.common.groovyvo.EasyCodeMetaClass;
+import easy.code.common.groovyvo.MyGroovyObject;
 import groovy.lang.Binding;
 import groovy.lang.GroovyClassLoader;
 import groovy.lang.GroovyObject;
@@ -26,9 +27,9 @@ public enum RuleType {
                     String defProperty = "\n def " + key + ";";
                     tempRuleS.insert(lastIndexOf, defProperty);
                 }
+                //构造对象
                 GroovyClassLoader loader = new GroovyClassLoader(
-                        this.getClass().getClassLoader()
-                        , ruleSource.getDefaultCompilerConfig());
+                        this.getClass().getClassLoader(), ruleSource.getDefaultCompilerConfig());
                 Class classR = loader.parseClass(tempRuleS.toString());
                 groovyObject = (GroovyObject) classR.newInstance();
             } catch (IllegalAccessException e) {

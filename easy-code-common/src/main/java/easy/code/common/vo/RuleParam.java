@@ -1,4 +1,4 @@
-package easy.code.common;
+package easy.code.common.vo;
 
 /**
  * 规则的执行参数
@@ -11,7 +11,7 @@ public class RuleParam {
     /**
      * 执行参数，必须存在
      */
-    private Object[] param;
+    private Object param;
     /**
      * 执行方法
      */
@@ -25,12 +25,12 @@ public class RuleParam {
         this.exeMethod = exeMethod;
     }
 
-    public void setParam(Object[] param) {
+    public void setParam(Object param) {
         this.param = param;
     }
 
     public Object[] getParam() {
-        return param == null ? new Object[]{} : param;
+        return param == null ? new Object[]{} : (Object[]) param;
     }
 
     public String getExeMethod() {

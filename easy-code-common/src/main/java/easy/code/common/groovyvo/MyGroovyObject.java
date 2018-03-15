@@ -1,5 +1,7 @@
-package easy.code.common;
+package easy.code.common.groovyvo;
 
+import easy.code.common.vo.RuleParam;
+import easy.code.common.vo.RuleResult;
 import groovy.lang.GroovyObject;
 
 import java.io.Serializable;

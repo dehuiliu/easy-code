@@ -1,4 +1,6 @@
-package easy.code.common;
+package easy.code.common.execute;
+
+import easy.code.common.ISourceLoad;
 
 public abstract class AbstractExecuteRule implements IExecuteRule {
 

@@ -1,4 +1,8 @@
-package easy.code.common;
+package easy.code.common.execute;
+
+import easy.code.common.IRuleKey;
+import easy.code.common.vo.RuleParam;
+import easy.code.common.vo.RuleResult;
 
 public interface IExecuteRule {
     /**

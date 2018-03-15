@@ -46,7 +46,9 @@ public class FileRuleInfo implements IRuleSource {
 
     @Override
     public Map<String, Object> getDefaultParamMap() {
-        return new HashMap<String, Object>();
+        HashMap<String, Object> paramMap = new HashMap<>();
+
+        return paramMap;
     }
 
 }

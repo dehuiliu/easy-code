@@ -1,5 +1,14 @@
 package easy.code.common.groovyvo;
 
+import easy.code.common.IRuleKey;
+import easy.code.common.exception.EasyCodeException;
+import easy.code.common.exception.ErrorCode;
+import easy.code.common.exception.ErrorMessage;
+import easy.code.common.execute.IExecuteType;
+import easy.code.common.util.RuleUtils;
+import easy.code.common.util.StringUtil;
+import easy.code.common.vo.RuleParam;
+import easy.code.common.vo.RuleResult;
 import groovy.lang.*;
 import org.codehaus.groovy.ast.ClassNode;
 import org.slf4j.Logger;
@@ -42,56 +51,49 @@ public class EasyCodeMetaClass implements MetaClass, MutableMetaClass {
     @Override
     public Object invokeMethod(Object object, String methodName, Object arguments) {
         if (logger.isDebugEnabled()) {
-            logger.debug("---- meta class execute ----");
+            logger.debug("---- meta class execute ---- ");
         }
         Object ret = null;
         try {
+            //执行 规则
             return executeMetaClass.invokeMethod(object, methodName, arguments);
         } catch (Exception e) {
-            GroovyObject groovyObject = (GroovyObject) object;
-//            String ruleId = StringUtil.obj2Str(groovyObject.getProperty("ruleId"));
-//            String executeMethodName = StringUtil.obj2Str(groovyObject.getProperty("executeMethodName"));
-//            if (e instanceof MissingMethodException) {
-//                RuleStack ruleStack = getContext().getRuleStack(ruleId);
-//                if (ruleStack != null) {
-//                    ruleStack.addMissExecuteMethod(methodName, arguments);
-//                    if (getContext().getRuleStack(ruleId).getMissMethodNum(methodName) > 100) {
-//                        throw new SystemException(CoreConstant.MODEL_NAME, CoreConstant.ERROR_MESSAGE_400053,
-//                                ruleId, methodName, arguments != null ? Arrays.asList(arguments).toString() : "");
-//                    }
-//                } else {
-//                    //添加执行栈对象
-//                    ruleStack = new RuleStack(ruleId, methodName, "");
-//                    ruleStack.addMissExecuteMethod(methodName, arguments);
-//                    ruleStack.addMissExecuteMethod(methodName, arguments);
-//                    getContext().addRuleStack(ruleId, ruleStack);
-//                }
-//                try {
-//                    ret = RuleManager.executeRule(StringUtil.obj2Str(getContext().getPrjCd()), methodName.toUpperCase(), arguments);
-//                    getContext().addRuleResult(methodName.toUpperCase(), arguments, ret);
-//                } catch (BusinessException businessException) {
-//                    if (StringUtil.isNotEmptyOrNull(executeMethodName)
-//                            && StringUtil.isEqual(executeMethodName, methodName)
-//                            && StringUtil.isEqual(businessException.getErrCode(), CoreConstant.ERROR_MESSAGE_400051)) {
-//                        throw new SystemException(CoreConstant.MODEL_NAME, CoreConstant.ERROR_MESSAGE_400053, ruleId, methodName,
-//                                arguments != null ? Arrays.asList(arguments).toString() : "");
-//                    } else {
-//                        throw new SystemException(businessException.getModelName(), businessException,
-//                                businessException.getErrCode(), businessException.getErrMsg());
-//                    }
-//                }
-//            } else {
-//                Exception e1 = (Exception) e.getCause();
-//                if (e1 instanceof BusinessException) {
-//                    BusinessException businessException = (BusinessException) e1;
-//                    throw new SystemException(businessException.getModelName(), e1,
-//                            businessException.getErrCode(), businessException.getErrMsg());
-//                } else {
-//                    throw new SystemException(CoreConstant.MODEL_NAME, e, CoreConstant.ERROR_MESSAGE_400029, ruleId);
-//                }
-//            }
+            //如果是 方法丢失异常
+            if (e instanceof MissingMethodException) {
+                // 继续寻找执行规则
+                GroovyObject groovyObject = (GroovyObject) object;
+                ret = executeOtherRule(groovyObject, arguments);
+            } else if (e instanceof EasyCodeException) {
+                // 直接抛出
+                throw e;
+            } else {
+                //其它异常 封装后抛出
+                throw EasyCodeException.asError(new ErrorMessage(ErrorCode.DOING_ERROR, ), e);
+            }
         }
         return ret;
+    }
+
+    private RuleResult executeOtherRule(GroovyObject groovyObject, Object arguments) throws EasyCodeException {
+        RuleResult ruleResult = null;
+        EasyCodeThreadLocal threadLocal = EasyCodeThreadLocal.getThreadLocal();
+        IExecuteType nowExecuteType = threadLocal.getNowExecuteType();
+        try {
+            IRuleKey ruleKey = (IRuleKey) groovyObject.getProperty("iRuleKey");
+            String executeMethodName = StringUtil.toString(groovyObject.getProperty("executeMethodName"));
+            RuleParam ruleParam = new RuleParam();
+            ruleParam.setParam(arguments);
+            ruleParam.setExeMethod(executeMethodName);
+            ruleResult = RuleUtils.executeRule(nowExecuteType, ruleKey, ruleParam);
+        } catch (EasyCodeException inException) {
+            //内部错误，直接抛出
+            throw inException;
+        } catch (Exception e) {
+            //未知异常 封装后抛出
+            throw EasyCodeException.asError(new ErrorMessage(ErrorCode.DOING_ERROR, ), e);
+        }
+        return ruleResult;
+
     }
 
     @Override

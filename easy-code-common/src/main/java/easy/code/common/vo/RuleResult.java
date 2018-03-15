@@ -1,4 +1,4 @@
-package easy.code.common;
+package easy.code.common.vo;
 
 /**
  * 规则的执行结果
