@@ -62,11 +62,8 @@ public class EasyCodeMetaClass implements MetaClass, MutableMetaClass {
                 GroovyObject groovyObject = (GroovyObject) object;
                 ret = executeOtherRule(methodName, arguments);
             } else if (e instanceof EasyCodeException) {
-                EasyCodeException easyException = (EasyCodeException) e;
-                //缓存规则调用链路异常信息
-                easyException.addLinked();
                 // 直接抛出
-                throw easyException;
+                throw e;
             } else {
                 //其它异常 封装后抛出
                 throw EasyCodeException.asException(
