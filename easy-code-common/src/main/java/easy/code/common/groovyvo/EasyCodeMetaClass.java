@@ -6,7 +6,6 @@ import easy.code.common.exception.ErrorCode;
 import easy.code.common.exception.ErrorMessage;
 import easy.code.common.execute.IExecuteType;
 import easy.code.common.util.RuleUtils;
-import easy.code.common.util.StringUtil;
 import easy.code.common.vo.RuleParam;
 import easy.code.common.vo.RuleResult;
 import groovy.lang.*;
@@ -62,25 +61,31 @@ public class EasyCodeMetaClass implements MetaClass, MutableMetaClass {
             if (e instanceof MissingMethodException) {
                 // 继续寻找执行规则
                 GroovyObject groovyObject = (GroovyObject) object;
-                ret = executeOtherRule(groovyObject, arguments);
+                ret = executeOtherRule(methodName, arguments);
             } else if (e instanceof EasyCodeException) {
+                EasyCodeException easyException = (EasyCodeException) e;
+                //缓存规则调用链路异常信息
+                easyException.addLinked();
                 // 直接抛出
-                throw e;
+                throw easyException;
             } else {
                 //其它异常 封装后抛出
-                throw EasyCodeException.asError(new ErrorMessage(ErrorCode.DOING_ERROR, ), e);
+                throw EasyCodeException.asException(
+                        new ErrorMessage(ErrorCode.DOING_ERROR, "未知异常"), e);
             }
         }
         return ret;
     }
 
-    private RuleResult executeOtherRule(GroovyObject groovyObject, Object arguments) throws EasyCodeException {
+    private RuleResult executeOtherRule(String methodName, Object arguments) throws EasyCodeException {
         RuleResult ruleResult = null;
         EasyCodeThreadLocal threadLocal = EasyCodeThreadLocal.getThreadLocal();
         IExecuteType nowExecuteType = threadLocal.getNowExecuteType();
         try {
-            IRuleKey ruleKey = (IRuleKey) groovyObject.getProperty("iRuleKey");
-            String executeMethodName = StringUtil.toString(groovyObject.getProperty("executeMethodName"));
+//            IRuleKey ruleKey = (IRuleKey) groovyObject.getProperty(IRuleSource._PROPERTY_RULE_KEY);
+            IRuleKey ruleKey = nowExecuteType.createKey(methodName);
+//            String executeMethodName = StringUtil.toString(groovyObject.getProperty("executeMethodName"));
+            String executeMethodName = ruleKey.getExecuteMethod();
             RuleParam ruleParam = new RuleParam();
             ruleParam.setParam(arguments);
             ruleParam.setExeMethod(executeMethodName);
@@ -90,7 +95,8 @@ public class EasyCodeMetaClass implements MetaClass, MutableMetaClass {
             throw inException;
         } catch (Exception e) {
             //未知异常 封装后抛出
-            throw EasyCodeException.asError(new ErrorMessage(ErrorCode.DOING_ERROR, ), e);
+            throw EasyCodeException.asException(
+                    new ErrorMessage(ErrorCode.DOING_ERROR, "未知异常"), e);
         }
         return ruleResult;
 

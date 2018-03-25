@@ -24,6 +24,10 @@ public class DefaultExecuteRule extends AbstractExecuteRule {
             //存入缓存信息
 
         }
+        if (ruleParam.isEmptyMethod()) {
+            String executeMethod = ruleKey.getExecuteMethod();
+            ruleParam.setExeMethod(executeMethod);
+        }
 
         //返回执行结果
         return myGroovyObject.execute(ruleParam);

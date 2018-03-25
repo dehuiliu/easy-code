@@ -1,7 +1,6 @@
 package easy.code.common.groovyvo;
 
 import easy.code.common.vo.RuleParam;
-import easy.code.common.vo.RuleResult;
 import groovy.lang.GroovyObject;
 
 import java.io.Serializable;
@@ -30,9 +29,8 @@ public class MyGroovyObject implements Serializable {
      * @param ruleParam 规则参数
      * @return 规则执行结果
      */
-    public RuleResult execute(RuleParam ruleParam) {
-        Object executeResult = getGroovyObject().
+    public Object execute(RuleParam ruleParam) {
+        return getGroovyObject().
                 invokeMethod(ruleParam.getExeMethod(), ruleParam.getParam());
-        return new RuleResult(executeResult);
     }
 }

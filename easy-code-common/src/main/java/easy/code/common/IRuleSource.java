@@ -6,6 +6,15 @@ import java.util.Map;
 
 public interface IRuleSource {
     /**
+     * 执行的规则key
+     */
+    String _PROPERTY_RULE_KEY = "iRuleKey";
+    /**
+     * 执行的方法名称
+     */
+    String _PROPERTY_METHOD_NAME_KEY = "executeMethodName";
+
+    /**
      * 规则主键的key
      *
      * @return 规则组件key

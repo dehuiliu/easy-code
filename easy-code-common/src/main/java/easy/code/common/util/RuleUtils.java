@@ -1,7 +1,6 @@
 package easy.code.common.util;
 
 import easy.code.common.IRuleKey;
-import easy.code.common.execute.ExecuteType;
 import easy.code.common.execute.IExecuteRule;
 import easy.code.common.execute.IExecuteType;
 import easy.code.common.groovyvo.EasyCodeThreadLocal;
@@ -24,10 +23,6 @@ public final class RuleUtils {
      * 若注入执行类型，就进行校验，没有注入就不用校验
      */
     private static boolean UN_CHECK = true;
-    /**
-     * 默认执行类型
-     */
-    private final static IExecuteType DEFAULT_EXE_TYPE = ExecuteType.FILE;
 
     private RuleUtils() {
 
@@ -39,7 +34,7 @@ public final class RuleUtils {
     }
 
     public static RuleResult executeRule(IRuleKey ruleKey, RuleParam ruleParam) {
-        return executeRule(DEFAULT_EXE_TYPE, ruleKey, ruleParam);
+        return executeRule(ruleKey.getExecuteType(), ruleKey, ruleParam);
     }
 
     public static RuleResult executeRule(IExecuteType ruleType, IRuleKey ruleKey, RuleParam ruleParam) {

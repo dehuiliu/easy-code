@@ -7,6 +7,7 @@ import easy.code.common.vo.RuleResult;
 public interface IExecuteRule {
     /**
      * 执行规则
+     * ruleParam中执行方法为空时，按照ruleKey中的执行方法
      *
      * @param ruleKey   规则唯一标示
      * @param ruleParam 规则的执行参数

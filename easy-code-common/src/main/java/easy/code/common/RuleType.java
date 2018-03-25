@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 public enum RuleType {
+
     CLASS {
         public MyGroovyObject parse(IRuleSource ruleSource) {
             Map<String, Object> bindMap = ruleSource.getDefaultParamMap();
@@ -33,24 +34,26 @@ public enum RuleType {
                 Class classR = loader.parseClass(tempRuleS.toString());
                 groovyObject = (GroovyObject) classR.newInstance();
             } catch (IllegalAccessException e) {
+
             } catch (InstantiationException e) {
+
             } catch (Exception e) {
+
             }
             //构造执行的 元类
             EasyCodeMetaClass metaClassOfCore = new EasyCodeMetaClass(groovyObject.getMetaClass());
             //设置元类
             groovyObject.setMetaClass(metaClassOfCore);
 
-            //todo设置上下文
+            //设置上下文
             for (Map.Entry entry : entrySet) {
-                String key = entry.getKey().toString();
-                String value = entry.getValue().toString();
-                groovyObject.setProperty(key, value);
+                groovyObject.setProperty(entry.getKey().toString(), entry.getValue());
             }
             return new MyGroovyObject(groovyObject);
         }
 
     },
+
     SCRIPT {
         public MyGroovyObject parse(IRuleSource ruleSource) {
             EasyCodeGroovyShell shellOfCore = new EasyCodeGroovyShell(

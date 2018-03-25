@@ -21,8 +21,6 @@ public class FileRuleInfo implements IRuleSource {
 
     public FileRuleInfo(FileRuleKey fileRuleKey) {
         this.fileRuleKey = fileRuleKey;
-        //加载规则文本
-
     }
 
     /**
@@ -39,6 +37,10 @@ public class FileRuleInfo implements IRuleSource {
         return this.ruleText;
     }
 
+    public void setRuleText(String ruleText) {
+        this.ruleText = ruleText;
+    }
+
     @Override
     public EasyCodeCompilerConfiguration getDefaultCompilerConfig() {
         return null;
@@ -47,7 +49,8 @@ public class FileRuleInfo implements IRuleSource {
     @Override
     public Map<String, Object> getDefaultParamMap() {
         HashMap<String, Object> paramMap = new HashMap<>();
-
+        paramMap.put(_PROPERTY_RULE_KEY, fileRuleKey);
+        paramMap.put(_PROPERTY_METHOD_NAME_KEY, "entryMethod");
         return paramMap;
     }
 

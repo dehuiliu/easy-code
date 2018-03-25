@@ -34,7 +34,10 @@ public class RuleParam {
     }
 
     public String getExeMethod() {
+        return isEmptyMethod() ? DEFAULT_METHOD : exeMethod;
+    }
 
-        return exeMethod == null || "".equals(exeMethod) ? DEFAULT_METHOD : exeMethod;
+    public boolean isEmptyMethod() {
+        return exeMethod == null || "".equals(exeMethod);
     }
 }

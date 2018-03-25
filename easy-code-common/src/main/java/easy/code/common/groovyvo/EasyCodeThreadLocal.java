@@ -87,7 +87,7 @@ public class EasyCodeThreadLocal {
     }
 
     public void setNowExecuteType(IExecuteType nowExecuteType) {
-        if (this.nowExecuteType != null) {
+        if (nowExecuteType != null) {
             this.nowExecuteType = nowExecuteType;
         }
     }
