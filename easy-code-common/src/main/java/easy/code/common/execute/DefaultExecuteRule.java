@@ -1,9 +1,10 @@
 package easy.code.common.execute;
 
-import easy.code.common.*;
+import easy.code.common.IRuleKey;
+import easy.code.common.IRuleSource;
+import easy.code.common.ISourceLoad;
 import easy.code.common.groovyvo.MyGroovyObject;
 import easy.code.common.vo.RuleParam;
-import easy.code.common.vo.RuleResult;
 
 public class DefaultExecuteRule extends AbstractExecuteRule {
 
@@ -13,7 +14,7 @@ public class DefaultExecuteRule extends AbstractExecuteRule {
     }
 
     @Override
-    public RuleResult getResult(IRuleKey ruleKey, RuleParam ruleParam) {
+    public Object getResult(IRuleKey ruleKey, RuleParam ruleParam) {
         //根据 ruleKey 从缓存加载  myGroovyObject
         MyGroovyObject myGroovyObject = getCache(ruleKey);
         if (myGroovyObject == null) {

@@ -7,7 +7,6 @@ import easy.code.common.exception.ErrorMessage;
 import easy.code.common.execute.IExecuteType;
 import easy.code.common.util.RuleUtils;
 import easy.code.common.vo.RuleParam;
-import easy.code.common.vo.RuleResult;
 import groovy.lang.*;
 import org.codehaus.groovy.ast.ClassNode;
 import org.slf4j.Logger;
@@ -77,8 +76,8 @@ public class EasyCodeMetaClass implements MetaClass, MutableMetaClass {
         return ret;
     }
 
-    private RuleResult executeOtherRule(String methodName, Object arguments) throws EasyCodeException {
-        RuleResult ruleResult = null;
+    private Object executeOtherRule(String methodName, Object arguments) throws EasyCodeException {
+        Object ruleResult = null;
         EasyCodeThreadLocal threadLocal = EasyCodeThreadLocal.getThreadLocal();
         IExecuteType nowExecuteType = threadLocal.getNowExecuteType();
         try {

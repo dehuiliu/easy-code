@@ -5,7 +5,6 @@ import easy.code.common.execute.IExecuteRule;
 import easy.code.common.execute.IExecuteType;
 import easy.code.common.groovyvo.EasyCodeThreadLocal;
 import easy.code.common.vo.RuleParam;
-import easy.code.common.vo.RuleResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,11 +32,11 @@ public final class RuleUtils {
         UN_CHECK = false;
     }
 
-    public static RuleResult executeRule(IRuleKey ruleKey, RuleParam ruleParam) {
+    public static Object executeRule(IRuleKey ruleKey, RuleParam ruleParam) {
         return executeRule(ruleKey.getExecuteType(), ruleKey, ruleParam);
     }
 
-    public static RuleResult executeRule(IExecuteType ruleType, IRuleKey ruleKey, RuleParam ruleParam) {
+    public static Object executeRule(IExecuteType ruleType, IRuleKey ruleKey, RuleParam ruleParam) {
         //执行类型缓存到上下文
         EasyCodeThreadLocal threadLocal = EasyCodeThreadLocal.getThreadLocal();
         threadLocal.setNowExecuteType(ruleType);
@@ -45,7 +44,7 @@ public final class RuleUtils {
         //校验 exeType 是否在执行的Types 中
         IExecuteRule executeRule = ruleType.getExecuteRule();
         //打印日志 开始执行
-        RuleResult result = executeRule.getResult(ruleKey, ruleParam);
+        Object result = executeRule.getResult(ruleKey, ruleParam);
 
         //打印结束日志
         return result;
