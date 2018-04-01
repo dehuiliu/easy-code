@@ -20,6 +20,10 @@ public class EasyCodeThreadLocal {
      * 当前执行的类型
      */
     private IExecuteType nowExecuteType;
+    /**
+     * 记录执行规则 信息
+     */
+    private ExecuteTree executeRuleInfo;
 
     private EasyCodeThreadLocal() {
 
@@ -90,5 +94,13 @@ public class EasyCodeThreadLocal {
         if (nowExecuteType != null) {
             this.nowExecuteType = nowExecuteType;
         }
+    }
+
+    public ExecuteTree getExecuteTree() {
+        return executeRuleInfo;
+    }
+
+    public void setExecuteTree(ExecuteTree executeRuleInfo) {
+        this.executeRuleInfo = executeRuleInfo;
     }
 }

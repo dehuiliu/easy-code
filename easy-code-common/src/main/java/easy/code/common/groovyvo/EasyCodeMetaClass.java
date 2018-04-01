@@ -2,8 +2,6 @@ package easy.code.common.groovyvo;
 
 import easy.code.common.IRuleKey;
 import easy.code.common.exception.EasyCodeException;
-import easy.code.common.exception.ErrorCode;
-import easy.code.common.exception.ErrorMessage;
 import easy.code.common.execute.IExecuteType;
 import easy.code.common.util.RuleUtils;
 import easy.code.common.vo.RuleParam;
@@ -51,49 +49,90 @@ public class EasyCodeMetaClass implements MetaClass, MutableMetaClass {
         if (logger.isDebugEnabled()) {
             logger.debug("---- meta class execute ---- ");
         }
+
         Object ret = null;
+        //execute rule
+        ExecuteTree executeTree = getTreeNode(object, methodName, arguments);
+        //now execute rule info
+        ExecuteRuleInfo thisRuleInfo = executeTree.getTempThis();
+
         try {
+
             //执行 规则
-            return executeMetaClass.invokeMethod(object, methodName, arguments);
+            ret = executeMetaClass.invokeMethod(object, methodName, arguments);
+
+            //记录 执行规则结果
+            executeTree.getTempThis().setOutPutParam(ret);
+
         } catch (Exception e) {
             //如果是 方法丢失异常
             if (e instanceof MissingMethodException) {
+                executeTree.setRecord(true);
                 // 继续寻找执行规则
-                GroovyObject groovyObject = (GroovyObject) object;
-                ret = executeOtherRule(methodName, arguments);
-            } else if (e instanceof EasyCodeException) {
-                // 直接抛出
-                throw e;
+                ret = executeOtherRule(methodName, arguments, executeTree);
+                //重置当前执行对象
+                executeTree.setTempThis(thisRuleInfo);
             } else {
-                //其它异常 封装后抛出
-                throw EasyCodeException.asException(
-                        new ErrorMessage(ErrorCode.DOING_ERROR, "未知异常"), e);
+
+                //记录 异常信息
+                executeTree.getTempThis().setError(true);
+                executeTree.getTempThis().setThrowable(e);
+
+                throw e;
             }
         }
         return ret;
     }
 
-    private Object executeOtherRule(String methodName, Object arguments) throws EasyCodeException {
+    private ExecuteTree getTreeNode(Object object, String methodName, Object param) {
+        ExecuteTree executeTree = EasyCodeThreadLocal.getThreadLocal().getExecuteTree();
+        Object iRuleKey = ((GroovyObject) object).getProperty("iRuleKey");
+        ExecuteRuleInfo executeRuleInfo = null;
+        //根的情况
+        if (executeTree == null) {
+            executeRuleInfo = new ExecuteRuleInfo();
+            //根
+            executeTree = new ExecuteTree(executeRuleInfo);
+            EasyCodeThreadLocal.getThreadLocal().setExecuteTree(executeTree);
+
+
+        } else if (executeTree.isRecord()) {
+            //进行记录
+            executeRuleInfo = new ExecuteRuleInfo();
+
+            executeTree.addSub(executeRuleInfo);
+
+        }
+        //补充执行对象信息
+        if (executeRuleInfo != null) {
+            executeRuleInfo.setRuleObject(object);
+            executeRuleInfo.setRuleKey((IRuleKey) iRuleKey);
+            executeRuleInfo.setInputParam(param);
+            executeRuleInfo.setMethod(methodName);
+            //当前执行的规则信息
+            executeTree.setTempThis(executeRuleInfo);
+            //不再记录，直到出现missing method exception 时继续
+            executeTree.setRecord(false);
+
+        }
+        return executeTree;
+
+    }
+
+    private Object executeOtherRule(String methodName, Object arguments,
+                                    ExecuteTree executeTree) throws EasyCodeException {
         Object ruleResult = null;
         EasyCodeThreadLocal threadLocal = EasyCodeThreadLocal.getThreadLocal();
+
         IExecuteType nowExecuteType = threadLocal.getNowExecuteType();
-        try {
-//            IRuleKey ruleKey = (IRuleKey) groovyObject.getProperty(IRuleSource._PROPERTY_RULE_KEY);
-            IRuleKey ruleKey = nowExecuteType.createKey(methodName);
-//            String executeMethodName = StringUtil.toString(groovyObject.getProperty("executeMethodName"));
-            String executeMethodName = ruleKey.getExecuteMethod();
-            RuleParam ruleParam = new RuleParam();
-            ruleParam.setParam(arguments);
-            ruleParam.setExeMethod(executeMethodName);
-            ruleResult = RuleUtils.executeRule(nowExecuteType, ruleKey, ruleParam);
-        } catch (EasyCodeException inException) {
-            //内部错误，直接抛出
-            throw inException;
-        } catch (Exception e) {
-            //未知异常 封装后抛出
-            throw EasyCodeException.asException(
-                    new ErrorMessage(ErrorCode.DOING_ERROR, "未知异常"), e);
-        }
+        IRuleKey ruleKey = nowExecuteType.createKey(methodName);
+
+        String executeMethodName = ruleKey.getExecuteMethod();
+        RuleParam ruleParam = new RuleParam();
+        ruleParam.setParam(arguments);
+        ruleParam.setExeMethod(executeMethodName);
+        ruleResult = RuleUtils.executeRule(nowExecuteType, ruleKey, ruleParam);
+
         return ruleResult;
 
     }

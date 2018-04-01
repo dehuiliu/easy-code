@@ -1,7 +1,5 @@
 package easy.code.common.groovyvo;
 
-import easy.code.common.exception.EasyCodeException;
-import easy.code.common.exception.LinkedException;
 import easy.code.common.vo.RuleParam;
 import groovy.lang.GroovyObject;
 
@@ -33,17 +31,11 @@ public class MyGroovyObject implements Serializable {
      */
     public Object execute(RuleParam ruleParam) {
         Object result = null;
-        try {
-            result = getGroovyObject().invokeMethod(ruleParam.getExeMethod(), ruleParam.getParam());
-        } catch (LinkedException e) {
-            LinkedException exception = new LinkedException(e);
-            throw exception.addLinkedException(e);
-        } catch (EasyCodeException e) {
-            LinkedException exception = new LinkedException(e);
-            throw exception.addEasyException(e);
-        } catch (Exception e) {
-            throw e;
-        }
+        //todo 日志
+
+        result = getGroovyObject().invokeMethod(ruleParam.getExeMethod(), ruleParam.getParam());
+
+        //日志
         return result;
     }
 }

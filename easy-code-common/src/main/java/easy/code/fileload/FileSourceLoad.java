@@ -15,7 +15,7 @@ public class FileSourceLoad implements ISourceLoad {
     @Override
     public FileRuleInfo getRuleSource(IRuleKey ruleKey) {
         FileRuleKey fileFileRuleKey = (FileRuleKey) ruleKey;
-        String rulePath = fileFileRuleKey.rulePath;
+        String rulePath = fileFileRuleKey.getRulePath();
 
         //加载规则文件信息
         File ruleFile = new File(StringUtil.formatFilePath(rulePath));

@@ -8,16 +8,20 @@ public class FileRuleKey implements IRuleKey {
     /**
      * 文件规则路径
      */
-    String rulePath;
+    private String rulePath;
     /**
      * class/script
      */
-    RuleType ruleType;
+    private RuleType ruleType;
 
     public FileRuleKey(String rulePath) {
         this.rulePath = rulePath + ".groovy";
 
         this.ruleType = RuleType.CLASS;
+    }
+
+    public String getRulePath() {
+        return rulePath;
     }
 
     public RuleType getRuleType() {
@@ -36,5 +40,13 @@ public class FileRuleKey implements IRuleKey {
 
     public FileRuleKey getRuleKey() {
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "rulePath='" + rulePath + '\'' +
+                ", ruleType=" + ruleType +
+                '}';
     }
 }
