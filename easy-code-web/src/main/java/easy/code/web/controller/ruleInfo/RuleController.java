@@ -2,6 +2,8 @@ package easy.code.web.controller.ruleInfo;
 
 import easy.code.common.IRuleSource;
 import easy.code.web.service.RuleService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +16,9 @@ import java.util.List;
 @Controller
 @RequestMapping("/rule")
 public class RuleController {
+
+    private static final Logger logger = LoggerFactory.getLogger(RuleController.class);
+
     @Autowired
     private RuleService ruleService;
 
@@ -26,7 +31,9 @@ public class RuleController {
     @RequestMapping("/save/{ruleKey}")
     @ResponseBody
     public String addRule(HttpServletRequest request, @PathVariable String ruleKey) {
+
         String ruleInfo = request.getParameter("ruleInfo");
+
         return ruleService.saveRuleInfo(ruleKey, ruleInfo);
     }
 
