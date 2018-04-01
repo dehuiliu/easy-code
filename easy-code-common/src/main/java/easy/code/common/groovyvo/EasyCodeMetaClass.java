@@ -54,7 +54,7 @@ public class EasyCodeMetaClass implements MetaClass, MutableMetaClass {
         //execute rule
         ExecuteTree executeTree = getTreeNode(object, methodName, arguments);
         //now execute rule info
-        ExecuteRuleInfo thisRuleInfo = executeTree.getTempThis();
+        ExecuteRuleNode thisRuleInfo = executeTree.getTempThis();
 
         try {
 
@@ -87,10 +87,10 @@ public class EasyCodeMetaClass implements MetaClass, MutableMetaClass {
     private ExecuteTree getTreeNode(Object object, String methodName, Object param) {
         ExecuteTree executeTree = EasyCodeThreadLocal.getThreadLocal().getExecuteTree();
         Object iRuleKey = ((GroovyObject) object).getProperty("iRuleKey");
-        ExecuteRuleInfo executeRuleInfo = null;
+        ExecuteRuleNode executeRuleInfo = null;
         //根的情况
         if (executeTree == null) {
-            executeRuleInfo = new ExecuteRuleInfo();
+            executeRuleInfo = new ExecuteRuleNode();
             //根
             executeTree = new ExecuteTree(executeRuleInfo);
             EasyCodeThreadLocal.getThreadLocal().setExecuteTree(executeTree);
@@ -98,7 +98,7 @@ public class EasyCodeMetaClass implements MetaClass, MutableMetaClass {
 
         } else if (executeTree.isRecord()) {
             //进行记录
-            executeRuleInfo = new ExecuteRuleInfo();
+            executeRuleInfo = new ExecuteRuleNode();
 
             executeTree.addSub(executeRuleInfo);
 

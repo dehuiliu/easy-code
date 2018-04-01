@@ -9,7 +9,7 @@ public class ExecuteTree {
     /**
      * 根 规则信息对象
      */
-    private ExecuteRuleInfo treeInfo;
+    private ExecuteRuleNode treeInfo;
     /**
      * 是否记录
      */
@@ -17,9 +17,9 @@ public class ExecuteTree {
     /**
      * 当前执行的规则信息
      */
-    private ExecuteRuleInfo tempThis;
+    private ExecuteRuleNode tempThis;
 
-    public ExecuteTree(ExecuteRuleInfo treeInfo) {
+    public ExecuteTree(ExecuteRuleNode treeInfo) {
         this.addRuleNum();
         treeInfo.setIndex(this.ruleNum);
 
@@ -31,7 +31,7 @@ public class ExecuteTree {
      *
      * @param subInfo 子规则信息
      */
-    public void addSub(ExecuteRuleInfo subInfo) {
+    public void addSub(ExecuteRuleNode subInfo) {
         //执行规则+1
         this.addRuleNum();
         subInfo.setIndex(ruleNum);
@@ -40,15 +40,15 @@ public class ExecuteTree {
 
     }
 
-    public ExecuteRuleInfo getTempThis() {
+    public ExecuteRuleNode getTempThis() {
         return tempThis;
     }
 
-    public void setTempThis(ExecuteRuleInfo tempThis) {
+    public void setTempThis(ExecuteRuleNode tempThis) {
         this.tempThis = tempThis;
     }
 
-    public ExecuteRuleInfo getTreeInfo() {
+    public ExecuteRuleNode getTreeInfo() {
         return treeInfo;
     }
 

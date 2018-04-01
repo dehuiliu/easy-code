@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * 执行的规则对象
  */
-public class ExecuteRuleInfo {
+public class ExecuteRuleNode {
     /**
      * 执行序号
      */
@@ -45,17 +45,17 @@ public class ExecuteRuleInfo {
     /**
      * 上级结构信息
      */
-    private ExecuteRuleInfo upExecuteRuleInfo;
+    private ExecuteRuleNode upExecuteRuleInfo;
     /**
      * 所有下级
      */
-    private List<ExecuteRuleInfo> subExecuteRuleInfo;
+    private List<ExecuteRuleNode> subExecuteRuleInfo;
 
-    public ExecuteRuleInfo() {
+    public ExecuteRuleNode() {
         subExecuteRuleInfo = new ArrayList<>();
     }
 
-    public ExecuteRuleInfo(IRuleKey ruleKey) {
+    public ExecuteRuleNode(IRuleKey ruleKey) {
         this();
         this.ruleKey = ruleKey;
     }
@@ -96,7 +96,7 @@ public class ExecuteRuleInfo {
         return throwable;
     }
 
-    public ExecuteRuleInfo getUpExecuteRuleInfo() {
+    public ExecuteRuleNode getUpExecuteRuleInfo() {
         return upExecuteRuleInfo;
     }
 
@@ -116,7 +116,7 @@ public class ExecuteRuleInfo {
         this.ruleObject = ruleObject;
     }
 
-    public void setUpExecuteRuleInfo(ExecuteRuleInfo upExecuteRuleInfo) {
+    public void setUpExecuteRuleInfo(ExecuteRuleNode upExecuteRuleInfo) {
         this.upExecuteRuleInfo = upExecuteRuleInfo;
     }
 
@@ -124,7 +124,7 @@ public class ExecuteRuleInfo {
         this.throwable = throwable;
     }
 
-    public void addNextExecuteRuleInfo(ExecuteRuleInfo subRuleInfo) {
+    public void addNextExecuteRuleInfo(ExecuteRuleNode subRuleInfo) {
         //添加到后面
         this.subExecuteRuleInfo.add(subRuleInfo);
         //设置 所有子的 上节点
@@ -136,7 +136,7 @@ public class ExecuteRuleInfo {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ExecuteRuleInfo that = (ExecuteRuleInfo) o;
+        ExecuteRuleNode that = (ExecuteRuleNode) o;
 
         if (index != that.index) return false;
         return ruleKey.equals(that.ruleKey);

@@ -15,14 +15,15 @@
     </parent>
 
     <dependencies>
-        <!--<dependency>-->
-            <!--<groupId>easy.code</groupId>-->
-            <!--<artifactId>easy-code-common</artifactId>-->
-            <!--<version>1.0-SNAPSHOT</version>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>easy.code</groupId>
+            <artifactId>easy-code-common</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
 
     </dependencies>

@@ -10,7 +10,6 @@
     <packaging>pom</packaging>
     <modules>
         <module>easy-code-common</module>
-        <module>easy-code-web</module>
     </modules>
 
     <build>
