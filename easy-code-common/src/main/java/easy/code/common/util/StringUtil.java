@@ -26,4 +26,8 @@ public class StringUtil {
         }
         throw new RuntimeException("------not have: " + inPath);
     }
+
+    public static boolean isEqual(String v1, String v2) {
+        return toString(v1).equals(toString(v2));
+    }
 }

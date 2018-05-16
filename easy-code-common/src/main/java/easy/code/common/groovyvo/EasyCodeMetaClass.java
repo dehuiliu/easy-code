@@ -2,7 +2,6 @@ package easy.code.common.groovyvo;
 
 import easy.code.common.IRuleKey;
 import easy.code.common.exception.EasyCodeException;
-import easy.code.common.execute.IExecuteType;
 import easy.code.common.util.RuleUtils;
 import easy.code.common.vo.RuleParam;
 import groovy.lang.*;
@@ -69,7 +68,7 @@ public class EasyCodeMetaClass implements MetaClass, MutableMetaClass {
             if (e instanceof MissingMethodException) {
                 executeTree.setRecord(true);
                 // 继续寻找执行规则
-                ret = executeOtherRule(methodName, arguments, executeTree);
+                ret = executeOtherRule(methodName, arguments);
                 //重置当前执行对象
                 executeTree.setTempThis(thisRuleInfo);
             } else {
@@ -119,19 +118,16 @@ public class EasyCodeMetaClass implements MetaClass, MutableMetaClass {
 
     }
 
-    private Object executeOtherRule(String methodName, Object arguments,
-                                    ExecuteTree executeTree) throws EasyCodeException {
+    private Object executeOtherRule(String methodName, Object arguments) throws EasyCodeException {
         Object ruleResult = null;
         EasyCodeThreadLocal threadLocal = EasyCodeThreadLocal.getThreadLocal();
 
-        IExecuteType nowExecuteType = threadLocal.getNowExecuteType();
-        IRuleKey ruleKey = nowExecuteType.createKey(methodName);
-
-        String executeMethodName = ruleKey.getExecuteMethod();
+        IRuleKey nowRuleKey = threadLocal.getNowRuleKey();
+        IRuleKey ruleKey = nowRuleKey.createKey(methodName);
+        //规则参数
         RuleParam ruleParam = new RuleParam();
         ruleParam.setParam(arguments);
-        ruleParam.setExeMethod(executeMethodName);
-        ruleResult = RuleUtils.executeRule(nowExecuteType, ruleKey, ruleParam);
+        ruleResult = RuleUtils.executeRule(ruleKey, ruleParam);
 
         return ruleResult;
 

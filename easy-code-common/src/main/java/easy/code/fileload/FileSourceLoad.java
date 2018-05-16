@@ -13,7 +13,7 @@ import java.io.File;
 public class FileSourceLoad implements ISourceLoad {
 
     @Override
-    public FileRuleInfo getRuleSource(IRuleKey ruleKey) {
+    public FileRuleSource getRuleSource(IRuleKey ruleKey) {
         FileRuleKey fileFileRuleKey = (FileRuleKey) ruleKey;
         String rulePath = fileFileRuleKey.getRulePath();
 
@@ -21,9 +21,6 @@ public class FileSourceLoad implements ISourceLoad {
         File ruleFile = new File(StringUtil.formatFilePath(rulePath));
         String ruleText = FileUtil.stringFile(ruleFile);
 
-        FileRuleInfo fileRuleInfo = new FileRuleInfo(fileFileRuleKey);
-        fileRuleInfo.setRuleText(ruleText);
-
-        return fileRuleInfo;
+        return new FileRuleSource(fileFileRuleKey,ruleText);
     }
 }

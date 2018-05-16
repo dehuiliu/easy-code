@@ -22,6 +22,13 @@ public interface IRuleSource {
     IRuleKey getKey();
 
     /**
+     * 当前规则类型
+     *
+     * @return class or shell
+     */
+    RuleType getRuleType();
+
+    /**
      * 获取 规则定义文件
      *
      * @return 规则文本

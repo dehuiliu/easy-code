@@ -1,6 +1,6 @@
 package easy.code.common.groovyvo;
 
-import easy.code.common.execute.IExecuteType;
+import easy.code.common.IRuleKey;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,9 +17,9 @@ public class EasyCodeThreadLocal {
      */
     private Map<String, Object> variableMap = new HashMap<>();
     /**
-     * 当前执行的类型
+     * 当前执行的规则key
      */
-    private IExecuteType nowExecuteType;
+    private IRuleKey nowRuleKey;
     /**
      * 记录执行规则 信息
      */
@@ -86,14 +86,12 @@ public class EasyCodeThreadLocal {
         return getVariableMap().get(key);
     }
 
-    public IExecuteType getNowExecuteType() {
-        return nowExecuteType;
+    public IRuleKey getNowRuleKey() {
+        return nowRuleKey;
     }
 
-    public void setNowExecuteType(IExecuteType nowExecuteType) {
-        if (nowExecuteType != null) {
-            this.nowExecuteType = nowExecuteType;
-        }
+    public void setNowRuleKey(IRuleKey nowRuleKey) {
+        this.nowRuleKey = nowRuleKey;
     }
 
     public ExecuteTree getExecuteTree() {

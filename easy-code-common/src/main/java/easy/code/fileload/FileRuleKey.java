@@ -1,8 +1,8 @@
 package easy.code.fileload;
 
 import easy.code.common.IRuleKey;
+import easy.code.common.ISourceLoad;
 import easy.code.common.RuleType;
-import easy.code.common.execute.ExecuteType;
 
 public class FileRuleKey implements IRuleKey {
     /**
@@ -24,18 +24,14 @@ public class FileRuleKey implements IRuleKey {
         return rulePath;
     }
 
-    public RuleType getRuleType() {
-        return this.ruleType;
+    @Override
+    public IRuleKey createKey(String ruleKey) {
+        return new FileRuleKey(ruleKey);
     }
 
     @Override
-    public ExecuteType getExecuteType() {
-        return ExecuteType.FILE;
-    }
-
-    @Override
-    public String getExecuteMethod() {
-        return "entryMethod";
+    public ISourceLoad sourceLoad() {
+        return new FileSourceLoad();
     }
 
     public FileRuleKey getRuleKey() {
@@ -49,4 +45,5 @@ public class FileRuleKey implements IRuleKey {
                 ", ruleType=" + ruleType +
                 '}';
     }
+
 }

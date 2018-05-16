@@ -1,16 +1,16 @@
 package easy.code.web.service;
 
-import easy.code.common.IRuleSource;
+import easy.code.web.service.common.CacheRuleInfo;
 
 import java.util.List;
 
 public interface RuleService {
 
-    String saveRuleInfo(String ruleKey, String ruleInfo);
+    String saveRuleInfo(String user, String ruleKey, String ruleInfo);
 
     String deleteRule(String ruleKey);
 
-    IRuleSource queryRuleByKey(String ruleKey);
+    CacheRuleInfo queryRuleByKey(String ruleKey);
 
-    List<IRuleSource> queryRuleList(String user);
+    List<CacheRuleInfo> queryRuleList(String user);
 }

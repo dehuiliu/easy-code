@@ -63,6 +63,10 @@ public enum RuleType {
         }
     };
 
+    public static MyGroovyObject parseRule(IRuleSource ruleSource){
+        RuleType ruleType = ruleSource.getRuleType();
+        return ruleType.parse(ruleSource);
+    }
     /**
      * 编译方法
      *

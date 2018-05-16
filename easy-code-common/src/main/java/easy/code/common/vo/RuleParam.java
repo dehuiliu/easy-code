@@ -7,7 +7,7 @@ public class RuleParam {
     /**
      * 默认执行方法名称
      */
-    private static final String DEFAULT_METHOD = "entry";
+    private static final String DEFAULT_METHOD = "entryMethod";
     /**
      * 执行参数，必须存在
      */

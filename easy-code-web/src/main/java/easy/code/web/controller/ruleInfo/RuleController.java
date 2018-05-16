@@ -1,7 +1,8 @@
 package easy.code.web.controller.ruleInfo;
 
-import easy.code.common.IRuleSource;
+import easy.code.web.controller.WebUtil;
 import easy.code.web.service.RuleService;
+import easy.code.web.service.common.CacheRuleInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +33,11 @@ public class RuleController {
     @ResponseBody
     public String addRule(HttpServletRequest request, @PathVariable String ruleKey) {
 
+        String user = WebUtil.getUser(request);
+
         String ruleInfo = request.getParameter("ruleInfo");
 
-        return ruleService.saveRuleInfo(ruleKey, ruleInfo);
+        return ruleService.saveRuleInfo(user, ruleKey, ruleInfo);
     }
 
     /**
@@ -51,15 +54,18 @@ public class RuleController {
 
     @RequestMapping("/query/{ruleKey}")
     public String queryDetail(@PathVariable String ruleKey) {
-        IRuleSource ruleSource = ruleService.queryRuleByKey(ruleKey);
-        return "";
+        CacheRuleInfo cacheRuleInfo = ruleService.queryRuleByKey(ruleKey);
+        return cacheRuleInfo.getRuleText();
     }
 
     @RequestMapping("/query")
-    public String queryDetail(HttpServletRequest request) {
-        String user = "";
-        List<IRuleSource> ruleSource = ruleService.queryRuleList(user);
-        return "";
+    @ResponseBody
+    public Object queryDetail(HttpServletRequest request) {
+        String user = WebUtil.getUser(request);
+
+        List<CacheRuleInfo> cacheRuleInfos = ruleService.queryRuleList(user);
+
+        return cacheRuleInfos;
     }
 
 }
